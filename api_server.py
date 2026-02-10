@@ -64,7 +64,7 @@ class ChatResponse(BaseModel):
 # Model loaders
 # =========================
 def load_llm():
-    print("[INFO] Loading Qwen3-14B (device_map=auto)")
+    print("[INFO] Loading Qwen3-14B (CPU, fp32)")
 
     tokenizer = AutoTokenizer.from_pretrained(
         LLM_CKPT,
@@ -73,8 +73,8 @@ def load_llm():
 
     model = AutoModelForCausalLM.from_pretrained(
         LLM_CKPT,
-        torch_dtype=torch.float16,
-        device_map="auto",
+        torch_dtype=torch.float32,
+        device_map="cpu",
         low_cpu_mem_usage=True,
         local_files_only=True,
     ).eval()
@@ -84,7 +84,7 @@ def load_llm():
 
 
 def load_vlm():
-    print("[INFO] Loading Qwen2.5-VL-7B (CPU, fp32)")
+    print("[INFO] Loading Qwen2.5-VL-7B (GPU, fp16)")
 
     processor = AutoProcessor.from_pretrained(
         VLM_CKPT,
@@ -93,8 +93,8 @@ def load_vlm():
 
     model = AutoModelForVision2Seq.from_pretrained(
         VLM_CKPT,
-        torch_dtype=torch.float32,
-        device_map="cpu",
+        torch_dtype=torch.float16,
+        device_map="auto",
         local_files_only=True,
     ).eval()
 
